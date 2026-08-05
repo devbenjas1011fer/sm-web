@@ -1,0 +1,119 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+
+
+
+#======================================================================================================
+
+
+# -------------------------------------------------------------------------
+# Flutter / Dart - Archivos y carpetas generados
+# -------------------------------------------------------------------------
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# Archivos web generados
+.generated_plugins
+
+# -------------------------------------------------------------------------
+# Símbolos de depuración y Web
+# -------------------------------------------------------------------------
+js_util/
+xcworkspace/
+
+# -------------------------------------------------------------------------
+# Android - Archivos generados y específicos de IDEs
+# -------------------------------------------------------------------------
+android/**/*.iml
+android/.gradle/
+android/local.properties
+android/generated_plugin_registrant.dart
+
+# Archivos de firmas y contraseñas (¡Muy importante no subirlos!)
+*.keystore
+*.jks
+*.p12
+*.pem
+
+# -------------------------------------------------------------------------
+# iOS / macOS - Archivos generados y CocoaPods
+# -------------------------------------------------------------------------
+ios/.pws/
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Pods/
+ios/.symlinks/
+ios/Flash/
+macos/Pods/
+macos/Flutter/Generated.xcconfig
+macos/Flutter/flutter_export_environment.sh
+
+# -------------------------------------------------------------------------
+# Configuración de Entornos y Variables Secretas
+# -------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+
+# -------------------------------------------------------------------------
+# Herramientas de Desarrollo e IDEs (VS Code, Android Studio, Xcode)
+# -------------------------------------------------------------------------
+.idea/
+*.iml
+.vscode/
+!.vscode/extensions.json
+.history/
+*~
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
