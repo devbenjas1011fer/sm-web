@@ -6,14 +6,9 @@ class Paths {
 
   static const String users =
       '/usuarios';
-
-  static const String clinicas =
-      '/clinicas';
+ 
   static const String roles =
-      '/roles';
-  static const String microservicios =
-      '/microservicios';
-
+      '/roles'; 
   static const String id =
       '/:id';
 

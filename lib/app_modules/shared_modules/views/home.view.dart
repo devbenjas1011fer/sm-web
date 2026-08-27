@@ -81,21 +81,7 @@ class HomeView extends GetView<HomeService> {
             },
           ),
 
-          ListTile(
-            leading: const Icon(Icons.perm_device_info_sharp),
-            title: const Text("Micro Servicios"),
-            onTap: () {
-              Get.rootDelegate.toNamed(AppRoutes.microServicesAdm);
-            },
-          ),
-
-          ListTile(
-            leading: const Icon(Icons.add_home_work_outlined),
-            title: const Text("Clinicas"),
-            onTap: () {
-              Get.rootDelegate.toNamed(AppRoutes.clinicasAdm);
-            },
-          ),
+          
         ],
       ),
     );
