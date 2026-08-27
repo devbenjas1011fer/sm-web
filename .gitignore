@@ -44,11 +44,7 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-
-
-
 #======================================================================================================
-
 
 # -------------------------------------------------------------------------
 # Flutter / Dart - Archivos y carpetas generados
@@ -117,3 +113,6 @@ macos/Flutter/flutter_export_environment.sh
 # Archivos del sistema operativo
 .DS_Store
 Thumbs.db
+
+# FVM Version Cache
+.fvm/
