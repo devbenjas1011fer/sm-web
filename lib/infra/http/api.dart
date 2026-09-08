@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:get/get.dart';
-import 'package:sm_web/infra/models/auth.dart';
+import 'package:sm_web/infra/routes/app.routes.dart';
 import 'package:sm_web/infra/storage/session.dart';
+
+import '../models/auth.dart';
 
 class ApiClient {
   ApiClient(
@@ -38,9 +40,11 @@ class ApiClient {
   void _configureInterceptors() {
     _getConnect.httpClient.addRequestModifier<dynamic>((request) {
       final token = SessionStorage.token;
+      final cid = SessionStorage.session?.clinicaId;
 
       if (token != null && token.isNotEmpty) {
         request.headers['Authorization'] = 'Bearer $token';
+        request.headers['se-cid'] = '$cid';
       }
 
       return request;
@@ -203,8 +207,12 @@ class ApiClient {
     }
   }
 
-  ApiResponse _handleResponse(Response<ApiResponse> response) {
+  Future<ApiResponse> _handleResponse(Response<ApiResponse> response) async {
     final body = response.body;
+    if (response.statusCode == 401) {
+      SessionStorage.erase();
+      Get.rootDelegate.toNamed(AppRoutes.login);
+    }
 
     if (response.statusCode == null) {
       return ApiResponse.failure(
@@ -215,8 +223,13 @@ class ApiClient {
     }
 
     if (body?.token != null && body!.token!.isNotEmpty) {
-      SessionStorage.setToken(body.token!);
-      SessionStorage.save(AuthProfile.fromJson(body.data["user"]));
+      final userData = Map<String, dynamic>.from(body.data["user"]);
+
+      userData["token"] = body.token;
+
+      final session = AuthProfile.fromJson(userData);
+
+      await SessionStorage.save(session);
     }
 
     return body ??

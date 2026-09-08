@@ -1,14 +1,18 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/auth.dart';
 
 class SessionStorage {
   SessionStorage._();
 
-  static const FlutterSecureStorage _storage =
+  static const FlutterSecureStorage _secureStorage =
       FlutterSecureStorage();
+
+  static SharedPreferences? _prefs;
 
   static const String _sessionKey = 'session';
   static const String _tokenKey = 'token';
@@ -18,10 +22,11 @@ class SessionStorage {
 
   static bool _initialized = false;
 
-  /// Inicializa la sesión desde Secure Storage.
   static Future<void> init() async {
-    if (_initialized) {
-      return;
+    if (_initialized) return;
+
+    if (kIsWeb) {
+      _prefs = await SharedPreferences.getInstance();
     }
 
     await _load();
@@ -29,30 +34,32 @@ class SessionStorage {
     _initialized = true;
   }
 
-  /// Carga nuevamente los datos desde Secure Storage.
   static Future<void> reload() async {
     await _load();
-
-    _initialized = true;
   }
 
   static Future<void> _load() async {
-    final values = await Future.wait([
-      _storage.read(key: _sessionKey),
-      _storage.read(key: _tokenKey),
-    ]);
+    String? sessionValue;
+    String? tokenValue;
 
-    final sessionValue = values[0];
-    final tokenValue = values[1];
+    if (kIsWeb) {
+      sessionValue = _prefs?.getString(_sessionKey);
+      tokenValue = _prefs?.getString(_tokenKey);
+    } else {
+      final values = await Future.wait([
+        _secureStorage.read(key: _sessionKey),
+        _secureStorage.read(key: _tokenKey),
+      ]);
+
+      sessionValue = values[0];
+      tokenValue = values[1];
+    }
 
     _token = tokenValue;
 
-    if (sessionValue != null &&
-        sessionValue.isNotEmpty) {
+    if (sessionValue != null && sessionValue.isNotEmpty) {
       try {
-        _session = AuthProfile.fromJson(
-          jsonDecode(sessionValue),
-        );
+        _session = AuthProfile.fromJson(jsonDecode(sessionValue));
       } catch (_) {
         _session = null;
       }
@@ -60,8 +67,6 @@ class SessionStorage {
       _session = null;
     }
 
-    // Si el token independiente no existe,
-    // intenta obtenerlo desde la sesión.
     _token ??= _session?.token;
   }
 
@@ -74,71 +79,73 @@ class SessionStorage {
       _token != null &&
       _token!.isNotEmpty;
 
-  static Future<void> save(
-    AuthProfile session,
-  ) async {
+  static Future<void> save(AuthProfile session) async {
     _session = session;
 
-    if (session.token != null &&
-        session.token!.isNotEmpty) {
+    if (session.token != null && session.token!.isNotEmpty) {
       _token = session.token;
     }
 
-    await Future.wait([
-      _storage.write(
-        key: _sessionKey,
-        value: jsonEncode(
-          session.toJson(),
-        ),
-      ),
+    final json = jsonEncode(session.toJson());
 
-      if (_token != null)
-        _storage.write(
-          key: _tokenKey,
-          value: _token!,
-        ),
-    ]);
+    if (kIsWeb) {
+      await _prefs?.setString(_sessionKey, json);
 
-    _initialized = true;
+      if (_token != null) {
+        await _prefs?.setString(_tokenKey, _token!);
+      }
+    } else {
+      await Future.wait([
+        _secureStorage.write(
+          key: _sessionKey,
+          value: json,
+        ),
+        if (_token != null)
+          _secureStorage.write(
+            key: _tokenKey,
+            value: _token!,
+          ),
+      ]);
+    }
   }
 
-  static Future<void> setToken(
-    String token,
-  ) async {
-    if (token.isEmpty) {
-      return;
-    }
-
+  static Future<void> setToken(String token) async {
     _token = token;
 
-    await _storage.write(
-      key: _tokenKey,
-      value: token,
-    );
-
-    _initialized = true;
+    if (kIsWeb) {
+      await _prefs?.setString(_tokenKey, token);
+    } else {
+      await _secureStorage.write(
+        key: _tokenKey,
+        value: token,
+      );
+    }
   }
 
   static Future<void> delete() async {
     _session = null;
     _token = null;
-    _initialized = true;
 
-    await Future.wait([
-      _storage.delete(
-        key: _sessionKey,
-      ),
-      _storage.delete(
-        key: _tokenKey,
-      ),
-    ]);
+    if (kIsWeb) {
+      await _prefs?.remove(_sessionKey);
+      await _prefs?.remove(_tokenKey);
+    } else {
+      await Future.wait([
+        _secureStorage.delete(key: _sessionKey),
+        _secureStorage.delete(key: _tokenKey),
+      ]);
+    }
   }
 
   static Future<void> erase() async {
     _session = null;
     _token = null;
-    _initialized = true;
+    _initialized = false;
 
-    await _storage.deleteAll();
+    if (kIsWeb) {
+      await _prefs?.clear();
+    } else {
+      await _secureStorage.deleteAll();
+    }
   }
 }

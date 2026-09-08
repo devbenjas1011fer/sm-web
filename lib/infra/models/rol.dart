@@ -1,10 +1,6 @@
 class RolModel {
   String? id;
   String? nombre;
-  String? numero;
-  String? curp;
-  String? direccion;
-  String? email;
 
   RolModel({
     this.id,

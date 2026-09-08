@@ -9,6 +9,10 @@ class Paths {
  
   static const String roles =
       '/roles'; 
+ 
+  static const String departaments =
+      '/departaments'; 
+      
   static const String id =
       '/:id';
 

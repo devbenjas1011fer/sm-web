@@ -90,7 +90,6 @@ class RolesView extends GetView<RolesController> {
                             ),
                           ),
                           title: Text(rol.nombre ?? 'Sin nombre'),
-                          subtitle: Text(rol.email ?? 'Sin correo'),
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () {
                             Get.rootDelegate.toNamed('/adm/roles/${rol.id}');

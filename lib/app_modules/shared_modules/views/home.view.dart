@@ -80,6 +80,13 @@ class HomeView extends GetView<HomeService> {
               Get.rootDelegate.toNamed(AppRoutes.rolesAdm);
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.perm_device_info_sharp),
+            title: const Text("Departamentos"),
+            onTap: () {
+              Get.rootDelegate.toNamed(AppRoutes.departaments);
+            },
+          ),
 
           
         ],

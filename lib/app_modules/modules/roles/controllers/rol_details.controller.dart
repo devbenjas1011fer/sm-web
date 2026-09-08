@@ -10,7 +10,7 @@ class RolDetailController extends GetxController {
 
   final Rxn<RolModel> rol = Rxn<RolModel>();
 
-  late final String userId;
+  late final String id;
 
   final RxBool isEditing = false.obs;
 
@@ -18,10 +18,10 @@ class RolDetailController extends GetxController {
   void onInit() {
     super.onInit();
 
-    userId = Get.parameters['id'] ?? '';
+    id = Get.parameters['id'] ?? '';
 
-    if (userId.isNotEmpty) {
-      if (userId != "new") {
+    if (id.isNotEmpty) {
+      if (id != "new") {
         getRol();
         isEditing.value = true;
       } else {
@@ -35,7 +35,7 @@ class RolDetailController extends GetxController {
     try {
       isLoading.value = true;
 
-      final user = await services.getId(userId);
+      final user = await services.getId(id);
 
       rol.value = user;
     } catch (error) {
@@ -50,6 +50,9 @@ class RolDetailController extends GetxController {
   Future<void> up() async {
     try {
       isLoading.value = true;
+      final role = id == "new"
+          ? await services.create(rol.value!)
+          : await services.up(id, rol.value!);
 
       Get.rootDelegate.popRoute();
       await RolesController.to.getRoles();

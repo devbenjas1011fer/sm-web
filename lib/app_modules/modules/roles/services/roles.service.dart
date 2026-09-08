@@ -32,11 +32,11 @@ class RolesService {
     );
   }
 
-  Future<RolModel?> create(RolModel user) async {
+  Future<bool?> create(RolModel user) async {
     final response = await api.post('/', user.toJson());
 
     if (response.status >= 200 && response.status < 300) {
-      return RolModel.fromJson(response.data['data']);
+      return  response.data['data'];
     }
     return null;
   }
@@ -45,7 +45,7 @@ class RolesService {
     final response = await api.put('/$id', user.toJson());
 
     if (response.status >= 200 && response.status < 300) {
-      return RolModel.fromJson(response.data['data']);
+      return  response.data['data'];
     }
     return null;
   }

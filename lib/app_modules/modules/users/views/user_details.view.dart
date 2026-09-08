@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sm_web/app_modules/modules/roles/services/roles.service.dart';
+import 'package:sm_web/infra/models/rol.dart';
 
 import '../controllers/usuario_details.controller.dart';
 
@@ -139,6 +141,55 @@ class AdmUsuarioDetailView extends GetView<UsuarioDetailController> {
                 ),
 
                 const SizedBox(height: 32),
+                FutureBuilder<List<RolModel>>(
+                  future: RolesService().get(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+
+                    final roles = snapshot.data ?? [];
+
+                    if (roles.isEmpty) {
+                      return const Text('No hay roles disponibles');
+                    }
+
+                    RolModel? selected;
+
+                    if (usuario.idRol != null) {
+                      for (final r in roles) {
+                        if (r.id == usuario.idRol) {
+                          selected = r;
+                          break;
+                        }
+                      }
+                    }
+
+                    return DropdownButtonFormField<RolModel>(
+                      initialValue: selected,
+                      decoration: const InputDecoration(
+                        labelText: 'Rol',
+                        border: OutlineInputBorder(),
+                      ),
+                      items: roles
+                          .map(
+                            (rol) => DropdownMenuItem<RolModel>(
+                              value: rol,
+                              child: Text(rol.nombre ?? ''),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        usuario.rol = value;
+                        usuario.idRol = value?.id;
+                      },
+                    );
+                  },
+                ),
 
                 // Text(
                 //   'Seguridad',

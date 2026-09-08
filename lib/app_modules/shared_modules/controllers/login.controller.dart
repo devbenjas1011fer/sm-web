@@ -13,6 +13,7 @@ class LoginController extends GetxController {
   final email = ''.obs;
   final password = ''.obs;
 
+
   Future<void> login() async {
     if (email.value.trim().isEmpty) {
       Get.snackbar('Atención', 'Ingresa tu correo electrónico.');
@@ -31,7 +32,7 @@ class LoginController extends GetxController {
     isLoading.value = true;
 
     try {
-      final response = await _api.post("/login", {
+      final response = await _api.post("/login-w", {
         'email': email.value.trim(),
         'password': password.value,
       });

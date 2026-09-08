@@ -22,7 +22,7 @@ class LoginView extends GetView<LoginController> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const Text(
-                      'SM ADMINISTRATIVO',
+                      'ADM CLINICA',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 28,
