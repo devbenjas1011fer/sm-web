@@ -38,7 +38,7 @@ class UsuarioModel {
     "NUMERO": numero,
     "CURP": curp,
     "DIRECCION": direccion,
-    "ROL_ID": direccion,
+    "ROL_ID": idRol,
     "ROL": rol?.toJson(),
     "CORREO": email,
   };
