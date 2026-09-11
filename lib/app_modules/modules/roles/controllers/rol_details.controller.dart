@@ -40,7 +40,6 @@ class RolDetailController extends GetxController {
       rol.value = user;
     } catch (error) {
       rol.value = null;
-      print(error);
       Get.snackbar('Error', 'No fue posible obtener el rol.');
     } finally {
       isLoading.value = false;
@@ -50,7 +49,7 @@ class RolDetailController extends GetxController {
   Future<void> up() async {
     try {
       isLoading.value = true;
-      final role = id == "new"
+       id == "new"
           ? await services.create(rol.value!)
           : await services.up(id, rol.value!);
 

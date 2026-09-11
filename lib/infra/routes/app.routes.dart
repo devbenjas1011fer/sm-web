@@ -8,7 +8,7 @@ class AppRoutes {
   static const String adm = '/adm';
 
   static const String usuariosAdm = '/adm/usuarios';
-  static const String departaments = '/adm/departamentso';
+  static const String departaments = '/adm/departamentos';
   static const String rolesAdm = '/adm/roles';
 
   static const String usuarioDetail = '/adm/usuarios/:id';

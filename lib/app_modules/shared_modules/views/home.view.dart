@@ -81,7 +81,7 @@ class HomeView extends GetView<HomeService> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.perm_device_info_sharp),
+            leading: const Icon(Icons.maps_home_work_outlined),
             title: const Text("Departamentos"),
             onTap: () {
               Get.rootDelegate.toNamed(AppRoutes.departaments);

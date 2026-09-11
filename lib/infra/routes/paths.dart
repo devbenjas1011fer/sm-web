@@ -11,7 +11,7 @@ class Paths {
       '/roles'; 
  
   static const String departaments =
-      '/departaments'; 
+      '/departamentos'; 
       
   static const String id =
       '/:id';
