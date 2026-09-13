@@ -117,11 +117,11 @@ class AdmUsuarioDetailView extends GetView<UsuarioDetailController> {
                     Expanded(
                       child: _EditableField(
                         label: 'Correo',
-                        value: usuario.email,
+                        value: usuario.correo,
                         icon: Icons.email_outlined,
                         enabled: controller.isEditing.value,
                         onChanged: (value) {
-                          usuario.email = value;
+                          usuario.correo = value;
                         },
                       ),
                     ),

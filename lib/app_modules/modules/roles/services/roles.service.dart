@@ -45,7 +45,7 @@ class RolesService {
     final response = await api.put('/$id', user.toJson());
 
     if (response.status >= 200 && response.status < 300) {
-      return  response.data['data'];
+      return  RolModel.fromJson(response.data['data']);
     }
     return null;
   }

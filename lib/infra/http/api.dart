@@ -44,7 +44,7 @@ class ApiClient {
 
       if (token != null && token.isNotEmpty) {
         request.headers['Authorization'] = 'Bearer $token';
-        request.headers['se-cid'] = '$cid';
+        request.headers[ 'se-cid'] = '$cid';
       }
 
       return request;

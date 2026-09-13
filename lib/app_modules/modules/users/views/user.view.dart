@@ -90,7 +90,7 @@ class AdmUsuariosView extends GetView<UsersController> {
                             ),
                           ),
                           title: Text(usuario.nombre ?? 'Sin nombre'),
-                          subtitle: Text(usuario.email ?? 'Sin correo'),
+                          subtitle: Text(usuario.correo ?? 'Sin correo'),
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () {
                             Get.rootDelegate.toNamed(

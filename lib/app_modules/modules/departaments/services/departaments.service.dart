@@ -46,7 +46,7 @@ class DepartamentsServices {
     final response = await api.put('/$id', user.toJson());
 
     if (response.status >= 200 && response.status < 300) {
-      return  response.data['data'];
+      return response.data['data']!=null? DepartamentoModel.fromJson(response.data['data']):null;
     }
     return null;
   }

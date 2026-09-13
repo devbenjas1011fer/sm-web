@@ -8,7 +8,7 @@ class UsuarioModel {
   String? direccion;
   RolModel? rol;
   String? idRol;
-  String? email;
+  String? correo;
 
   UsuarioModel({
     this.id,
@@ -16,7 +16,7 @@ class UsuarioModel {
     this.numero,
     this.curp,
     this.direccion,
-    this.email,
+    this.correo,
     this.rol,
     this.idRol,
   });
@@ -27,7 +27,7 @@ class UsuarioModel {
     numero: json["NUMERO"],
     curp: json["CURP"],
     direccion: json["DIRECCION"],
-    email: json["CORREO"],
+    correo: json["CORREO"],
     rol: json["ROL"]!=null?RolModel.fromJson(json["ROL"]):null,
     idRol: json["ROL_ID"],
   );
@@ -40,7 +40,7 @@ class UsuarioModel {
     "DIRECCION": direccion,
     "ROL_ID": idRol,
     "ROL": rol?.toJson(),
-    "CORREO": email,
+    "CORREO": correo,
   };
 
   Map<String, dynamic> toJsonSession() => {"ID": id, "NOMBRES": nombre};
