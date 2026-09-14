@@ -48,6 +48,10 @@ class DepartamentDetailController extends GetxController {
 
   Future<void> up() async {
     try {
+      if (departamento.value?.adminId == null) {
+        //return
+        return;
+      }
       isLoading.value = true;
       id == "new"
           ? await services.create(departamento.value!)

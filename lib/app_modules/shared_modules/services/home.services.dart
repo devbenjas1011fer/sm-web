@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:get/get.dart";
 import 'package:flutter/foundation.dart';
 import "package:sm_web/infra/routes/app.routes.dart";
+import "package:sm_web/infra/storage/session.dart";
 
 class HomeService extends GetxService {
   // List<Access> accessList = [];
@@ -40,7 +41,7 @@ class HomeService extends GetxService {
   }
 
   Future<void> logout() async {
-    // await GetStorage().erase();
+    SessionStorage.erase();
     Get.rootDelegate.offNamed(AppRoutes.login);
   }
 }

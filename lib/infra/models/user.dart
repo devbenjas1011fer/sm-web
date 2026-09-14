@@ -1,4 +1,6 @@
-import 'package:sm_web/infra/models/rol.dart';
+
+import '../../../../infra/models/departamento.dart';
+import '../../../../infra/models/rol.dart';
 
 class UsuarioModel {
   String? id;
@@ -6,9 +8,12 @@ class UsuarioModel {
   String? numero;
   String? curp;
   String? direccion;
+  String? correo;
+
   RolModel? rol;
   String? idRol;
-  String? correo;
+
+  List<DepartamentoModel> departamentos;
 
   UsuarioModel({
     this.id,
@@ -19,29 +24,49 @@ class UsuarioModel {
     this.correo,
     this.rol,
     this.idRol,
+    this.departamentos = const [],
   });
 
-  factory UsuarioModel.fromJson(Map<String, dynamic> json) => UsuarioModel(
-    id: json["ID"],
-    nombre: json["NOMBRES"],
-    numero: json["NUMERO"],
-    curp: json["CURP"],
-    direccion: json["DIRECCION"],
-    correo: json["CORREO"],
-    rol: json["ROL"]!=null?RolModel.fromJson(json["ROL"]):null,
-    idRol: json["ROL_ID"],
-  );
+  factory UsuarioModel.fromJson(Map<String, dynamic> json) =>
+      UsuarioModel(
+        id: json["ID"],
+        nombre: json["NOMBRES"],
+        numero: json["NUMERO"],
+        curp: json["CURP"],
+        direccion: json["DIRECCION"],
+        correo: json["CORREO"],
+        rol: json["ROL"] != null
+            ? RolModel.fromJson(json["ROL"])
+            : null,
+        idRol: json["ROL_ID"],
+        departamentos: json["DEPARTAMENTOS"] != null
+            ? (json["DEPARTAMENTOS"] as List)
+                .map(
+                  (e) => DepartamentoModel.fromJson(e),
+                )
+                .toList()
+            : [],
+      );
 
   Map<String, dynamic> toJson() => {
-    "ID": id,
-    "NOMBRES": nombre,
-    "NUMERO": numero,
-    "CURP": curp,
-    "DIRECCION": direccion,
-    "ROL_ID": idRol,
-    "ROL": rol?.toJson(),
-    "CORREO": correo,
-  };
+        "ID": id,
+        "NOMBRES": nombre,
+        "NUMERO": numero,
+        "CURP": curp,
+        "DIRECCION": direccion,
+        "ROL_ID": idRol,
+        "ROL": rol?.toJson(),
+        "CORREO": correo,
+        "DEPARTAMENTOS": departamentos
+            .map((e) => e.toJson())
+            .toList(),
+      };
 
-  Map<String, dynamic> toJsonSession() => {"ID": id, "NOMBRES": nombre};
-}
+  Map<String, dynamic> toJsonSession() => {
+        "ID": id,
+        "NOMBRES": nombre,
+        "DEPARTAMENTOS": departamentos
+            .map((e) => e.toJsonUSer())
+            .toList(),
+      };
+}  

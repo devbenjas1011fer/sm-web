@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sm_web/infra/storage/session.dart';
 
+import '../app_modules/shared_modules/services/home.services.dart';
+
 class ProfileMenuWidget extends StatelessWidget {
   const ProfileMenuWidget({super.key});
 
@@ -61,7 +63,7 @@ class ProfileMenuWidget extends StatelessWidget {
 
       onSelected: (value) {
         if (value == 1) {
-          // HomeService.to.logout();
+          HomeService.to.logout();
         }
       },
 

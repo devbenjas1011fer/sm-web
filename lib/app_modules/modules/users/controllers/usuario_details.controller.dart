@@ -1,6 +1,4 @@
 import 'package:get/get.dart';
-import 'package:sm_web/app_modules/modules/users/controllers/users.controllers.dart';
-
 import '../../../../infra/models/user.dart';
 import '../services/users.service.dart';
 
@@ -52,10 +50,9 @@ class UsuarioDetailController extends GetxController {
     try {
       isLoading.value = true;
 
-      final user = userId == "new"
+      final user = (userId == "new")
           ? await services.create(usuario.value!)
           : await services.up(userId, usuario.value!);
-      await UsersController.to.getUsers();
       usuario.value = user;
       update();
     } catch (error) {

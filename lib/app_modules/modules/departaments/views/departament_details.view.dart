@@ -15,17 +15,13 @@ class DepartamentDetailsView extends GetView<DepartamentDetailController> {
     return Scaffold(
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Center(child: CircularProgressIndicator());
         }
 
         final departamento = controller.departamento.value;
 
         if (departamento == null) {
-          return const Center(
-            child: Text('Departamento no encontrado.'),
-          );
+          return const Center(child: Text('Departamento no encontrado.'));
         }
 
         return Scaffold(
@@ -40,20 +36,17 @@ class DepartamentDetailsView extends GetView<DepartamentDetailController> {
               ),
             ),
             actions: [
-              IconButton(
+              departamento.departamentoId!=null?IconButton(
                 onPressed: controller.up,
                 icon: Icon(
                   Icons.save_outlined,
                   color: theme.colorScheme.primary,
                 ),
                 tooltip: 'Guardar',
-              ),
+              ):Container(),
               IconButton(
                 onPressed: () => Get.rootDelegate.popRoute(),
-                icon: Icon(
-                  Icons.close,
-                  color: theme.colorScheme.primary,
-                ),
+                icon: Icon(Icons.close, color: theme.colorScheme.primary),
                 tooltip: 'Cerrar',
               ),
               const SizedBox(width: 8),
@@ -81,7 +74,7 @@ class DepartamentDetailsView extends GetView<DepartamentDetailController> {
                   },
                 ),
                 const SizedBox(height: 24),
-                _AdminSelector(
+                DepartamentsUser(
                   departamento: departamento,
                   enabled: controller.isEditing.value,
                 ),
@@ -94,20 +87,21 @@ class DepartamentDetailsView extends GetView<DepartamentDetailController> {
   }
 }
 
-class _AdminSelector extends StatefulWidget {
+class DepartamentsUser extends StatefulWidget {
   final dynamic departamento;
   final bool enabled;
 
-  const _AdminSelector({
+  const DepartamentsUser({
+    super.key,
     required this.departamento,
     required this.enabled,
   });
 
   @override
-  State<_AdminSelector> createState() => _AdminSelectorState();
+  State<DepartamentsUser> createState() => _DepartamentsUserState();
 }
 
-class _AdminSelectorState extends State<_AdminSelector> {
+class _DepartamentsUserState extends State<DepartamentsUser> {
   final TextEditingController searchController = TextEditingController();
 
   List<UsuarioModel> usuarios = [];
@@ -160,17 +154,21 @@ class _AdminSelectorState extends State<_AdminSelector> {
         return;
       }
 
-      resultados = usuarios.where((usuario) {
-        final nombre = usuario.nombre?.toLowerCase() ?? '';
-        final correo = usuario.correo?.toLowerCase() ?? '';
-        final numero = usuario.numero?.toLowerCase() ?? '';
+      resultados = usuarios
+          .where((usuario) {
+            final nombre = usuario.nombre?.toLowerCase() ?? '';
+            final correo = usuario.correo?.toLowerCase() ?? '';
+            final numero = usuario.numero?.toLowerCase() ?? '';
 
-        return nombre.contains(query) ||
-            correo.contains(query) ||
-            numero.contains(query);
-      }).where((usuario) {
-        return usuario.id != seleccionado?.id;
-      }).take(8).toList();
+            return nombre.contains(query) ||
+                correo.contains(query) ||
+                numero.contains(query);
+          })
+          .where((usuario) {
+            return usuario.id != seleccionado?.id;
+          })
+          .take(8)
+          .toList();
     });
   }
 
@@ -229,7 +227,7 @@ class _AdminSelectorState extends State<_AdminSelector> {
             ),
           )
         else if (seleccionado != null)
-          _SelectedAdmin(
+          _SelectedDepartament(
             usuario: seleccionado!,
             enabled: widget.enabled,
             onRemove: _remove,
@@ -263,9 +261,7 @@ class _AdminSelectorState extends State<_AdminSelector> {
                 const SizedBox(height: 8),
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      color: theme.dividerColor,
-                    ),
+                    border: Border.all(color: theme.dividerColor),
                     borderRadius: BorderRadius.circular(12),
                     color: theme.colorScheme.surface,
                   ),
@@ -293,15 +289,14 @@ class _AdminSelectorState extends State<_AdminSelector> {
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       usuario.nombre ?? 'Sin nombre',
                                       style: theme.textTheme.bodyLarge
                                           ?.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                     ),
                                     const SizedBox(height: 2),
                                     if (usuario.correo != null)
@@ -309,10 +304,10 @@ class _AdminSelectorState extends State<_AdminSelector> {
                                         usuario.correo!,
                                         style: theme.textTheme.bodySmall
                                             ?.copyWith(
-                                          color: theme
-                                              .colorScheme
-                                              .onSurfaceVariant,
-                                        ),
+                                              color: theme
+                                                  .colorScheme
+                                                  .onSurfaceVariant,
+                                            ),
                                       ),
                                   ],
                                 ),
@@ -357,12 +352,12 @@ class _AdminSelectorState extends State<_AdminSelector> {
   }
 }
 
-class _SelectedAdmin extends StatelessWidget {
+class _SelectedDepartament extends StatelessWidget {
   final UsuarioModel usuario;
   final bool enabled;
   final VoidCallback onRemove;
 
-  const _SelectedAdmin({
+  const _SelectedDepartament({
     required this.usuario,
     required this.enabled,
     required this.onRemove,
@@ -387,9 +382,7 @@ class _SelectedAdmin extends StatelessWidget {
             radius: 22,
             child: Text(
               _initial(usuario.nombre),
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
           const SizedBox(width: 12),
@@ -419,10 +412,7 @@ class _SelectedAdmin extends StatelessWidget {
             IconButton(
               tooltip: 'Quitar administrador',
               onPressed: onRemove,
-              icon: Icon(
-                Icons.close,
-                color: theme.colorScheme.error,
-              ),
+              icon: Icon(Icons.close, color: theme.colorScheme.error),
             ),
         ],
       ),
@@ -459,10 +449,7 @@ class _EditableField extends StatelessWidget {
       initialValue: value ?? '',
       enabled: enabled,
       onChanged: onChanged,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-      ),
+      decoration: InputDecoration(labelText: label, prefixIcon: Icon(icon)),
     );
   }
-} 
+}
