@@ -65,6 +65,7 @@ class UsuarioModel {
   Map<String, dynamic> toJsonSession() => {
         "ID": id,
         "NOMBRES": nombre,
+        "CORREO": nombre,
         "DEPARTAMENTOS": departamentos
             .map((e) => e.toJsonUSer())
             .toList(),

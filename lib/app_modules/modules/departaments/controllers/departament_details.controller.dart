@@ -12,6 +12,7 @@ class DepartamentDetailController extends GetxController {
 
   late final String id;
 
+  static DepartamentDetailController get to => Get.find();
   final RxBool isEditing = false.obs;
 
   @override
@@ -48,17 +49,18 @@ class DepartamentDetailController extends GetxController {
 
   Future<void> up() async {
     try {
-      if (departamento.value?.adminId == null) {
+      if (departamento.value?.admin == null) {
         //return
         return;
       }
       isLoading.value = true;
-      id == "new"
+      final resp = (id == "new")
           ? await services.create(departamento.value!)
           : await services.up(id, departamento.value!);
-
-      Get.rootDelegate.popRoute();
-      await DepartamentsController.to.getDepartaments();
+      if (resp == true) {
+        Get.rootDelegate.popRoute();
+        await DepartamentsController.to.getDepartaments();
+      }
     } catch (error) {
       departamento.value = null;
       // print(error);

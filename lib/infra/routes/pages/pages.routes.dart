@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sm_web/app_modules/modules/departaments/bindings/departaments.dart';
+import 'package:sm_web/app_modules/modules/departaments/bindings/departaments_binding.dart';
 import 'package:sm_web/app_modules/modules/departaments/views/departament_details.view.dart';
 import 'package:sm_web/app_modules/modules/departaments/views/departaments.view.dart';
 import 'package:sm_web/app_modules/modules/roles/bindings/rol_details.dart';
@@ -20,7 +20,7 @@ import 'package:sm_web/infra/routes/app.routes.dart';
 import 'package:sm_web/infra/routes/pages/root_view.dart';
 import 'package:sm_web/infra/routes/paths.dart';
 
-import '../../../app_modules/modules/departaments/bindings/departament_details.dart';
+import '../../../app_modules/modules/departaments/bindings/departament_details_binfing.dart';
 
 class PagesApp {
   PagesApp._();
