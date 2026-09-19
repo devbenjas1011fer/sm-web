@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import '../../../../infra/models/user.dart';
 import '../services/users.service.dart';
@@ -8,6 +9,8 @@ class UsuarioDetailController extends GetxController {
   final RxBool isLoading = false.obs;
 
   final Rxn<UsuarioModel> usuario = Rxn<UsuarioModel>();
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   late final String userId;
 
@@ -48,6 +51,10 @@ class UsuarioDetailController extends GetxController {
 
   Future<void> up() async {
     try {
+      if (formKey.currentState?.validate() != true) {
+        return;
+      }
+
       isLoading.value = true;
 
       final user = (userId == "new")

@@ -4,6 +4,8 @@ import 'package:sm_web/app_modules/modules/departaments/services/departaments.se
 import 'package:sm_web/app_modules/modules/roles/services/roles.service.dart';
 import 'package:sm_web/infra/models/departamento.dart';
 import 'package:sm_web/infra/models/rol.dart';
+import 'package:sm_web/infra/utils/validaciones.dart';
+import 'package:sm_web/widgets/campo_texto.dart';
 import '../controllers/usuario_details.controller.dart';
 
 class AdmUsuarioDetailView extends GetView<UsuarioDetailController> {
@@ -55,7 +57,10 @@ class AdmUsuarioDetailView extends GetView<UsuarioDetailController> {
               const SizedBox(width: 8),
             ],
           ),
-          body: SingleChildScrollView(
+          body: Form(
+            key: controller.formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: SingleChildScrollView(
             padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,22 +78,21 @@ class AdmUsuarioDetailView extends GetView<UsuarioDetailController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: _EditableField(
+                      child: CampoTexto(
                         label: 'Nombre',
-                        value: usuario.nombre,
                         icon: Icons.person_outline,
+                        initialValue: usuario.nombre,
                         enabled: controller.isEditing.value,
                         onChanged: (value) {
                           usuario.nombre = value;
                         },
+                        validator: (v) => Validaciones.nombre(v, campo: 'El nombre'),
                       ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
-                      child: _EditableField(
-                        label: 'Número',
-                        value: usuario.numero,
-                        icon: Icons.phone_outlined,
+                      child: CampoTexto.telefono(
+                        initialValue: usuario.numero,
                         enabled: controller.isEditing.value,
                         onChanged: (value) {
                           usuario.numero = value;
@@ -104,10 +108,8 @@ class AdmUsuarioDetailView extends GetView<UsuarioDetailController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: _EditableField(
-                        label: 'CURP',
-                        value: usuario.curp,
-                        icon: Icons.badge_outlined,
+                      child: CampoTexto.curp(
+                        initialValue: usuario.curp,
                         enabled: controller.isEditing.value,
                         onChanged: (value) {
                           usuario.curp = value;
@@ -116,14 +118,16 @@ class AdmUsuarioDetailView extends GetView<UsuarioDetailController> {
                     ),
                     const SizedBox(width: 16),
                     Expanded(
-                      child: _EditableField(
+                      child: CampoTexto(
                         label: 'Correo',
-                        value: usuario.correo,
                         icon: Icons.email_outlined,
+                        initialValue: usuario.correo,
                         enabled: controller.isEditing.value,
+                        keyboardType: TextInputType.emailAddress,
                         onChanged: (value) {
                           usuario.correo = value;
                         },
+                        validator: Validaciones.correo,
                       ),
                     ),
                   ],
@@ -131,14 +135,15 @@ class AdmUsuarioDetailView extends GetView<UsuarioDetailController> {
 
                 const SizedBox(height: 16),
 
-                _EditableField(
+                CampoTexto(
                   label: 'Dirección',
-                  value: usuario.direccion,
                   icon: Icons.location_on_outlined,
+                  initialValue: usuario.direccion,
                   enabled: controller.isEditing.value,
                   onChanged: (value) {
                     usuario.direccion = value;
-                  },  
+                  },
+                  validator: Validaciones.direccion,
                 ),
 
                 const SizedBox(height: 32),
@@ -188,15 +193,17 @@ class AdmUsuarioDetailView extends GetView<UsuarioDetailController> {
                         usuario.rol = value;
                         usuario.idRol = value?.id;
                       },
+                      validator: Validaciones.valorRequerido<RolModel>(campo: 'El rol'),
                     );
                   },
                 ),
                 // AdminSelector(
                 //   usuario: usuario,
                 //   enabled: controller.isEditing.value,
-                // ), 
-            
+                // ),
+
               ],
+            ),
             ),
           ),
         );
@@ -473,31 +480,5 @@ class _AdminSelectorState extends State<AdminSelector> {
     }
 
     return nombre.trim().substring(0, 1).toUpperCase();
-  }
-}
-
-class _EditableField extends StatelessWidget {
-  final String label;
-  final String? value;
-  final IconData icon;
-  final bool enabled;
-  final ValueChanged<String> onChanged;
-
-  const _EditableField({
-    required this.label,
-    required this.value,
-    required this.icon,
-    required this.enabled,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      initialValue: value ?? '',
-      enabled: enabled,
-      onChanged: onChanged,
-      decoration: InputDecoration(labelText: label, prefixIcon: Icon(icon)),
-    );
   }
 }

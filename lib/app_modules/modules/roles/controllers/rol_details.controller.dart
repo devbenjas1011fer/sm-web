@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:sm_web/app_modules/modules/roles/controllers/roles.controllers.dart';
 import '../../../../infra/models/rol.dart';
@@ -9,6 +10,8 @@ class RolDetailController extends GetxController {
   final RxBool isLoading = false.obs;
 
   final Rxn<RolModel> rol = Rxn<RolModel>();
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   late final String id;
 

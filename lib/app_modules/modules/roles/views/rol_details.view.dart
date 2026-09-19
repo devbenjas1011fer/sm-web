@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sm_web/infra/utils/validaciones.dart';
+import 'package:sm_web/widgets/campo_texto.dart';
 
 import '../controllers/rol_details.controller.dart';
 
@@ -56,7 +58,10 @@ class RolDetailsView extends GetView<RolDetailController> {
 
         final modulos = rol.modulos ?? [];
 
-        return SingleChildScrollView(
+        return Form(
+          key: controller.formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,16 +76,15 @@ class RolDetailsView extends GetView<RolDetailController> {
 
               const SizedBox(height: 16),
 
-              TextFormField(
-                initialValue: rol.nombre ?? '',
+              CampoTexto(
+                label: 'Nombre del rol',
+                icon: Icons.admin_panel_settings_outlined,
+                initialValue: rol.nombre,
                 enabled: controller.isEditing.value,
                 onChanged: (value) {
                   rol.nombre = value;
                 },
-                decoration: const InputDecoration(
-                  labelText: 'Nombre del rol',
-                  prefixIcon: Icon(Icons.admin_panel_settings_outlined),
-                ),
+                validator: (v) => Validaciones.requerido(v, campo: 'El nombre del rol'),
               ),
 
               const SizedBox(height: 32),
@@ -158,6 +162,7 @@ class RolDetailsView extends GetView<RolDetailController> {
                   ),
                 ),
             ],
+          ),
           ),
         );
       }),

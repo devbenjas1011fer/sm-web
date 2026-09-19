@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../infra/models/user.dart';
+import '../../../../infra/utils/validaciones.dart';
+import '../../../../widgets/campo_texto.dart';
 
 class AdmAdd extends StatefulWidget {
   const AdmAdd({super.key});
@@ -28,16 +30,6 @@ class _AdmAddState extends State<AdmAdd> {
     super.dispose();
   }
 
-  InputDecoration _input(String label, IconData icon) {
-    return InputDecoration(
-      labelText: label,
-      prefixIcon: Icon(icon),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-    );
-  }
-
   void _guardar() {
     if (!_formKey.currentState!.validate()) return;
 
@@ -61,80 +53,39 @@ class _AdmAddState extends State<AdmAdd> {
         width: 450,
         child: Form(
           key: _formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextFormField(
+                CampoTexto(
+                  label: "Nombre",
+                  icon: Icons.person,
                   controller: _nombreController,
-                  decoration: _input("Nombre", Icons.person),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return "Ingrese el nombre";
-                    }
-                    return null;
-                  },
+                  validator: (v) => Validaciones.nombre(v, campo: "El nombre"),
                 ),
                 const SizedBox(height: 15),
-                TextFormField(
+                CampoTexto.telefono(
+                  label: "Número",
                   controller: _numeroController,
-                  keyboardType: TextInputType.phone,
-                  decoration: _input("Número", Icons.phone),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return "Ingrese el número";
-                    }
-                    return null;
-                  },
                 ),
                 const SizedBox(height: 15),
-                TextFormField(
-                  controller: _curpController,
-                  textCapitalization: TextCapitalization.characters,
-                  decoration: _input("CURP", Icons.badge),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return "Ingrese la CURP";
-                    }
-
-                    if (value.trim().length != 18) {
-                      return "La CURP debe contener 18 caracteres";
-                    }
-
-                    return null;
-                  },
-                ),
+                CampoTexto.curp(controller: _curpController),
                 const SizedBox(height: 15),
-                TextFormField(
+                CampoTexto(
+                  label: "Dirección",
+                  icon: Icons.location_on,
                   controller: _direccionController,
                   maxLines: 2,
-                  decoration: _input("Dirección", Icons.location_on),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return "Ingrese la dirección";
-                    }
-                    return null;
-                  },
+                  validator: Validaciones.direccion,
                 ),
                 const SizedBox(height: 15),
-                TextFormField(
+                CampoTexto(
+                  label: "Correo",
+                  icon: Icons.email,
                   controller: _correoController,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: _input("Correo", Icons.email),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return "Ingrese el correo";
-                    }
-
-                    final regex =
-                        RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-
-                    if (!regex.hasMatch(value.trim())) {
-                      return "Correo inválido";
-                    }
-
-                    return null;
-                  },
+                  validator: Validaciones.correo,
                 ),
               ],
             ),

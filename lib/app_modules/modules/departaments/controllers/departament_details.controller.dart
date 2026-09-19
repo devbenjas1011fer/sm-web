@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:sm_web/app_modules/modules/departaments/controllers/departaments.controllers.dart';
 import 'package:sm_web/infra/models/departamento.dart';
@@ -9,6 +10,8 @@ class DepartamentDetailController extends GetxController {
   final RxBool isLoading = false.obs;
 
   final Rxn<DepartamentoModel> departamento = Rxn<DepartamentoModel>();
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   late final String id;
 
@@ -49,6 +52,10 @@ class DepartamentDetailController extends GetxController {
 
   Future<void> up() async {
     try {
+      if (formKey.currentState?.validate() != true) {
+        return;
+      }
+
       if (departamento.value?.admin == null) {
         //return
         return;

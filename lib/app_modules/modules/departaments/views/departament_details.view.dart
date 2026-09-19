@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sm_web/infra/models/user.dart';
+import 'package:sm_web/infra/utils/validaciones.dart';
+import 'package:sm_web/widgets/campo_texto.dart';
 
 import '../controllers/departament_details.controller.dart';
 
@@ -73,7 +75,10 @@ class DepartamentDetailsView extends GetView<DepartamentDetailController> {
             ),
             actions: [const SizedBox(width: 16)],
           ),
-          body: SingleChildScrollView(
+          body: Form(
+            key: controller.formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,24 +120,17 @@ class DepartamentDetailsView extends GetView<DepartamentDetailController> {
                         ],
                       ),
                       const SizedBox(height: 22),
-                      TextFormField(
+                      CampoTexto(
+                        label: 'Nombre del departamento',
+                        icon: Icons.business_outlined,
                         initialValue: departamento.nombre,
                         enabled: controller.isEditing.value,
                         onChanged: (value) {
                           departamento.nombre = value;
                         },
-                        decoration: InputDecoration(
-                          labelText: 'Nombre del departamento',
-                          prefixIcon: const Icon(Icons.business_outlined),
-                          filled: true,
-                          fillColor: Colors.grey.shade50,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
+                        validator: (v) => Validaciones.requerido(
+                          v,
+                          campo: 'El nombre del departamento',
                         ),
                       ),
                     ],
@@ -185,44 +183,28 @@ class DepartamentDetailsView extends GetView<DepartamentDetailController> {
                           Row(
                             children: [
                               Expanded(
-                                child: TextFormField(
+                                child: CampoTexto(
+                                  label: 'Nombre',
+                                  icon: Icons.person_outline,
                                   initialValue: departamento.admin?.nombre,
                                   enabled: controller.isEditing.value,
                                   onChanged: (value) {
                                     departamento.admin?.nombre = value;
                                   },
-                                  decoration: InputDecoration(
-                                    labelText: 'Nombre',
-                                    prefixIcon: const Icon(
-                                      Icons.person_outline,
-                                    ),
-                                    filled: true,
-                                    fillColor: Colors.grey.shade50,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
+                                  validator: (v) => Validaciones.nombre(
+                                    v,
+                                    campo: 'El nombre',
                                   ),
                                 ),
                               ),
                               const SizedBox(width: 16),
                               Expanded(
-                                child: TextFormField(
+                                child: CampoTexto.telefono(
                                   initialValue: departamento.admin?.numero,
                                   enabled: controller.isEditing.value,
                                   onChanged: (value) {
                                     departamento.admin?.numero = value;
                                   },
-                                  decoration: InputDecoration(
-                                    labelText: 'Número',
-                                    prefixIcon: const Icon(
-                                      Icons.phone_outlined,
-                                    ),
-                                    filled: true,
-                                    fillColor: Colors.grey.shade50,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
                                 ),
                               ),
                             ],
@@ -233,45 +215,26 @@ class DepartamentDetailsView extends GetView<DepartamentDetailController> {
                           Row(
                             children: [
                               Expanded(
-                                child: TextFormField(
+                                child: CampoTexto.curp(
                                   initialValue: departamento.admin?.curp,
                                   enabled: controller.isEditing.value,
                                   onChanged: (value) {
-                                    departamento.admin?.curp = value.toUpperCase();
+                                    departamento.admin?.curp = value;
                                   },
-                                  decoration: InputDecoration(
-                                    labelText: 'CURP',
-                                    prefixIcon: const Icon(
-                                      Icons.badge_outlined,
-                                    ),
-                                    filled: true,
-                                    fillColor: Colors.grey.shade50,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
                                 ),
                               ),
                               const SizedBox(width: 16),
                               Expanded(
-                                child: TextFormField(
+                                child: CampoTexto(
+                                  label: 'Correo',
+                                  icon: Icons.email_outlined,
                                   initialValue: departamento.admin?.correo,
                                   enabled: controller.isEditing.value,
                                   keyboardType: TextInputType.emailAddress,
                                   onChanged: (value) {
                                     departamento.admin?.correo = value;
                                   },
-                                  decoration: InputDecoration(
-                                    labelText: 'Correo',
-                                    prefixIcon: const Icon(
-                                      Icons.email_outlined,
-                                    ),
-                                    filled: true,
-                                    fillColor: Colors.grey.shade50,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
+                                  validator: Validaciones.correo,
                                 ),
                               ),
                             ],
@@ -279,24 +242,16 @@ class DepartamentDetailsView extends GetView<DepartamentDetailController> {
 
                           const SizedBox(height: 16),
 
-                          TextFormField(
+                          CampoTexto(
+                            label: 'Dirección',
+                            icon: Icons.location_on_outlined,
                             initialValue: departamento.admin?.direccion,
                             enabled: controller.isEditing.value,
                             maxLines: 2,
                             onChanged: (value) {
                               departamento.admin?.direccion = value;
                             },
-                            decoration: InputDecoration(
-                              labelText: 'Dirección',
-                              prefixIcon: const Icon(
-                                Icons.location_on_outlined,
-                              ),
-                              filled: true,
-                              fillColor: Colors.grey.shade50,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
+                            validator: Validaciones.direccion,
                           ),
                         ],
                       ),
@@ -304,6 +259,7 @@ class DepartamentDetailsView extends GetView<DepartamentDetailController> {
                   ),
                 ),
               ],
+            ),
             ),
           ),
         );
