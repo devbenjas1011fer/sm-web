@@ -17,7 +17,8 @@ class SmAdmApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp.router(
-      title: SessionStorage.session?.clinica?.nombre ?? "PANEL ADMINISTRATÍVO",
+      title:
+          "PANEL ${SessionStorage.session!.clinica!.nombre ?? " ADMINISTRATÍVO"}",
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
