@@ -48,11 +48,12 @@ class LoginController extends GetxController {
           Get.snackbar('Error', 'El servidor no devolvió un token de sesión.');
 
           return;
+        } else {
+          await HomeService.to.buildMenu();
+          final path = HomeService.to.pathSelected.value;
+          await Get.rootDelegate.offNamed(path);
+          return;
         }
-        final path = HomeService.to.pathSelected.value;
-        await Get.rootDelegate.offNamed(path);
-
-        return;
       }
 
       Get.snackbar('No se pudo iniciar sesión', response.message);

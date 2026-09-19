@@ -222,12 +222,9 @@ class ApiClient {
       );
     }
 
-    if (body?.token != null && body!.token!.isNotEmpty) {
-      final userData = Map<String, dynamic>.from(body.data["user"]);
+    if (body?.token != null && body!.token!.isNotEmpty) { 
 
-      userData["token"] = body.token;
-
-      final session = AuthProfile.fromJson(userData);
+      final session = AuthProfile.fromJson(body.data);
 
       await SessionStorage.save(session);
     }

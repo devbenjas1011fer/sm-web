@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sm_web/infra/routes/app.routes.dart';
 
+import '../../../infra/routes/app.routes.dart';
+import '../../../infra/storage/session.dart';
 import '../../../widgets/profile_menu.dart';
 import '../services/home.services.dart';
 
@@ -13,15 +14,13 @@ class HomeView extends GetView<HomeService> {
     return GetRouterOutlet.builder(
       builder: (context, delegate, currentRoute) {
         return Scaffold(
-          key: HomeService.to.scaffoldKey,
-
           drawer: controller.mobile ? Drawer(child: _buildMenu()) : null,
 
           appBar: AppBar(
             backgroundColor: Get.theme.colorScheme.primary,
             centerTitle: false,
-            title: const Text(
-              'Panel Administrativo',
+            title: Text(
+              "PANEL ${SessionStorage.session!.clinica!.nombre ?? " ADMINISTRATÍVO"}",
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
@@ -32,8 +31,21 @@ class HomeView extends GetView<HomeService> {
 
           body: Row(
             children: [
-              // Menú lateral (solo escritorio)
-              if (!controller.mobile) SizedBox(width: 260, child: _buildMenu()),
+              if (!controller.mobile)
+                SizedBox(
+                  width: 260,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        right: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    child: _buildMenu(),
+                  ),
+                ),
 
               Expanded(
                 child: GetRouterOutlet(
@@ -52,45 +64,40 @@ class HomeView extends GetView<HomeService> {
 
   Widget _buildMenu() {
     return Material(
-      child: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        children: [
-          ListTile(
-            leading: const Icon(Icons.people),
-            title: const Text("Usuarios"),
-            onTap: () {
-              Get.rootDelegate.toNamed(AppRoutes.usuariosAdm);
-            },
-          ),
+      child: Obx(() {
+        if (controller.menuItems.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-          // ListTile(
-          //   leading: const Icon(Icons.admin_panel_settings),
-          //   title: const Text('Roles'),
-          //   onTap: () {
-          //     Get.rootDelegate.toNamed(
-          //       "",
-          //       // AppRoutes.rolesAdm,
-          //     );
-          //   },
-          // ),
-          ListTile(
-            leading: const Icon(Icons.perm_device_info_sharp),
-            title: const Text("Roles"),
-            onTap: () {
-              Get.rootDelegate.toNamed(AppRoutes.rolesAdm);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.maps_home_work_outlined),
-            title: const Text("Departamentos"),
-            onTap: () {
-              Get.rootDelegate.toNamed(AppRoutes.departaments);
-            },
-          ),
+        return ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          itemCount: controller.menuItems.length,
+          itemBuilder: (context, index) {
+            final item = controller.menuItems[index];
 
-          
-        ],
-      ),
+            return Obx(() {
+              final isSelected = controller.pathSelected.value == item.route;
+
+              return ListTile(
+                selected: isSelected,
+                selectedTileColor: Get.theme.colorScheme.primary.withValues(
+                  alpha: 0.1,
+                ),
+                leading: controller.getIcon(item.iconKey),
+                title: Text(
+                  item.title,
+                  style: TextStyle(
+                    fontWeight: isSelected
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                  ),
+                ),
+                onTap: () => controller.navigateTo(item.route),
+              );
+            });
+          },
+        );
+      }),
     );
   }
 }
