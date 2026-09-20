@@ -51,8 +51,8 @@ class HomeService extends GetxService {
       final response = await _api.post("/access", {});
 
       if (response.status == 200) {
-        List<ModuloModel> apiResponse = response.data["data"] != null
-            ? (response.data["data"] as List)
+        List<ModuloModel> apiResponse = response.data != null
+            ? (response.data as List)
                   .map((e) => ModuloModel.fromJson(e))
                   .toList()
             : [];

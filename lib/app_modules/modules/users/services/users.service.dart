@@ -9,7 +9,7 @@ class UsersService {
     final response = await api.get('/');
 
     if (response.status >= 200 && response.status < 300) {
-      final data = response.data["data"];
+      final data = response.data;
 
       if (data is List) {
         return data
@@ -25,7 +25,7 @@ class UsersService {
     final response = await api.get('/$id');
 
     if (response.status >= 200 && response.status < 300) {
-      return UsuarioModel.fromJson(response.data['data']);
+      return UsuarioModel.fromJson(response.data);
     }
 
     throw Exception(
@@ -37,7 +37,7 @@ class UsersService {
     final response = await api.post('/', user.toJson());
 
     if (response.status >= 200 && response.status < 300) {
-      return UsuarioModel.fromJson(response.data['data']);
+      return UsuarioModel.fromJson(response.data);
     }
     return null;
   }
@@ -46,7 +46,7 @@ class UsersService {
     final response = await api.put('/$id', user.toJson());
 
     if (response.status >= 200 && response.status < 300) {
-      return UsuarioModel.fromJson(response.data['data']);
+      return UsuarioModel.fromJson(response.data);
     }
     return null;
   }

@@ -20,7 +20,7 @@ class HomeView extends GetView<HomeService> {
             backgroundColor: Get.theme.colorScheme.primary,
             centerTitle: false,
             title: Text(
-              "PANEL ${SessionStorage.session!.clinica!.nombre ?? " ADMINISTRATÍVO"}",
+              "PANEL ${SessionStorage.session?.clinica?.nombre ?? " ADMINISTRATÍVO"}",
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,

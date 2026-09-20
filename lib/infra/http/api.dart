@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:sm_web/infra/routes/app.routes.dart';
 import 'package:sm_web/infra/storage/session.dart';
 
+import '../../app_modules/shared_modules/services/home.services.dart';
 import '../models/auth.dart';
 
 class ApiClient {
@@ -222,11 +223,14 @@ class ApiClient {
       );
     }
 
-    if (body?.token != null && body!.token!.isNotEmpty) { 
+    if (body?.token != null && body!.token!.isNotEmpty) {
+      if (!SessionStorage.hasSession) {
+        final session = AuthProfile.fromJson(body.data);
 
-      final session = AuthProfile.fromJson(body.data);
+        await SessionStorage.save(session);
 
-      await SessionStorage.save(session);
+        await HomeService.to.buildMenu();
+      }
     }
 
     return body ??
@@ -292,7 +296,7 @@ class ApiResponse<T> {
       message: json['message']?.toString() ?? '',
       status: _parseStatus(json['status']),
       codeError: json['errorCode']?.toString(),
-      token: json["data"]['token']?.toString(),
+      token: json['token']?.toString(),
     );
   }
 

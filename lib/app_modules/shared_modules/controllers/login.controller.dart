@@ -49,7 +49,6 @@ class LoginController extends GetxController {
 
           return;
         } else {
-          await HomeService.to.buildMenu();
           final path = HomeService.to.pathSelected.value;
           await Get.rootDelegate.offNamed(path);
           return;
