@@ -6,6 +6,7 @@ class AuthProfile {
   String? rol;
   String? token;
   String? nombre;
+  bool? admin;
   String? clinicaId;
   String? departamentoId;
   ClinicaModel? clinica;
@@ -16,6 +17,7 @@ class AuthProfile {
     this.token,
     this.nombre,
     this.rol,
+    this.admin,
     this.clinica,
     this.clinicaId,
     this.departamentoId,
@@ -26,6 +28,7 @@ class AuthProfile {
         id: json["id"],
         token: json["token"],
         rol: json["rol"],
+        admin: json["admin"]==true,
         nombre: json["nombre"],
         clinicaId: json["clinicaId"],
         departamentoId: json["departamentoId"],
@@ -41,6 +44,7 @@ class AuthProfile {
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "admin": admin,
         "clinicaId": clinicaId,
         "departamentoId": departamentoId,
         "clinica": clinica?.toJson(),
@@ -54,6 +58,7 @@ class AuthProfile {
   Map<String, dynamic> toJsonSession() => {
         "id": id,
         "rol": rol,
+        "admin": admin,
         "nombre": nombre,
         "clinicaId": clinicaId,
         "departamentoId": departamentoId,

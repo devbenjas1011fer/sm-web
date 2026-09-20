@@ -12,7 +12,7 @@ class ProfileMenuWidget extends StatefulWidget {
 }
 
 class _ProfileMenuWidgetState extends State<ProfileMenuWidget> {
-  DepartamentoModel? selectedDepartment = SessionStorage.session?.  departamentos
+  DepartamentoModel? selectedDepartment = SessionStorage.session?.departamentos
       ?.firstWhere(((e) => e.id == SessionStorage.session?.departamentoId));
 
   @override
@@ -187,7 +187,7 @@ class _ProfileMenuWidgetState extends State<ProfileMenuWidget> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        user.rol ?? 'Usuario',
+                        '${user.rol ?? 'Usuario'} (${user.admin == true ? "MASTER" : ""})',
                         style: TextStyle(
                           fontSize: 12,
                           color: primary,
