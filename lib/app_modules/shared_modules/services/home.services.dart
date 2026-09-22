@@ -48,7 +48,7 @@ class HomeService extends GetxService {
   Future<void> buildMenu() async {
     try {
       // 2. Petición directa al backend
-      final response = await _api.post("/access", {});
+      final response = await _api.post("/access-admin", {});
 
       if (response.status == 200) {
         List<ModuloModel> apiResponse = response.data != null
